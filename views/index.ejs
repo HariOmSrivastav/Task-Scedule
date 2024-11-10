@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Schedule</title>
+    <style>
+        /* Global Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background-color: #f4f6f9;
+            padding: 20px;
+            color: #333;
+        }
+
+        h2 {
+            margin: 10px 0;
+            color: #007bff;
+        }
+
+        /* Form Styles */
+        form {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            max-width: 500px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        label {
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        input[type="text"] {
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            width: 100%;
+        }
+
+        button {
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            color: #fff;
+            font-weight: bold;
+        }
+
+        button[type="submit"] {
+            background-color: #007bff;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        /* Task List Styles */
+        ul {
+            list-style: none;
+            width: 100%;
+            max-width: 500px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        li {
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+            font-size: 16px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        li:last-child {
+            border-bottom: none;
+        }
+
+        .task-title {
+            color: #007bff;
+            font-weight: bold;
+        }
+
+        .task-details {
+            margin-left: 15px;
+            color: #555;
+        }
+
+        .task-buttons {
+            display: flex;
+            margin-top: 5px;
+        }
+
+        .task-buttons form {
+            margin-right: 5px;
+        }
+
+        /* Update button color */
+        .task-buttons button[type="button"] {
+            background-color: #343a40; /* Dark color */
+        }
+
+        .task-buttons button[type="button"]:hover {
+            background-color: #23272b;
+        }
+
+        /* Delete button color */
+        .task-buttons button[type="submit"] {
+            background-color: #dc3545; /* Red */
+        }
+
+        .task-buttons button[type="submit"]:hover {
+            background-color: #c82333;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 500px) {
+            body, form, ul {
+                width: 100%;
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h2>Task Schedule</h2>
+    <form action="/add-task" method="post" id="taskForm">
+        <label>Title</label>
+        <input type="text" name="Title" id="Title" placeholder="Title" required>
+        <label>Description</label>
+        <input type="text" name="Description" id="Description" placeholder="Description" required>
+        <label>CreatedBy</label>
+        <input type="text" name="CreatedBy" id="CreatedBy" placeholder="CreatedBy" required>
+        <button type="submit">Add Task</button>
+    </form>
+    <h2>Saved Tasks</h2>
+    <ul>
+        <% tasks.forEach(task => { %>
+            <li>
+                <span class="task-title"><%= task.Title %></span>
+                <span class="task-details">Description: <%= task.Description %></span>
+                <span class="task-details">Created By: <%= task.CreatedBy %></span>
+                <div class="task-buttons">
+                    <form action="/update/<%= task._id %>" method="post">
+                        <button type="button" onclick="editTask('<%= task._id %>', '<%= task.Title %>', '<%= task.Description %>', '<%= task.CreatedBy %>')">Update</button>
+                    </form>
+                    <form action="/delete/<%= task._id %>" method="post">
+                        <button type="submit">Delete</button>
+                    </form>
+                </div>
+            </li>
+        <% }) %>
+    </ul>
+    <script>
+        function editTask(id, title, description, createdby) {
+            document.getElementById('taskForm').action = `/update/${id}`;
+            document.getElementById('Title').value = title;
+            document.getElementById('Description').value = description;
+            document.getElementById('CreatedBy').value = createdby;
+        }
+    </script>
+</body>
+</html>
